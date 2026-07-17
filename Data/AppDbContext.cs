@@ -18,8 +18,6 @@ public class AppDbContext(DbContextOptions<AppDbContext> options) : DbContext(op
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
-        modelBuilder.HasDefaultSchema("base_schema");
-
         modelBuilder.Entity<MovieGenre>()
             .HasKey(mg => new { mg.MovieId, mg.Genre });
 
