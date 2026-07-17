@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using SeatsReservationDotNet.Data;
@@ -11,9 +12,11 @@ using SeatsReservationDotNet.Data;
 namespace SeatsReservationDotNet.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20260622124646_InitialCreate")]
+    partial class InitialCreate
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -286,6 +289,10 @@ namespace SeatsReservationDotNet.Migrations
                         .HasColumnType("character varying(255)")
                         .HasColumnName("customer_name");
 
+                    b.Property<bool>("IsAvailable")
+                        .HasColumnType("boolean")
+                        .HasColumnName("is_available");
+
                     b.Property<long>("SeatId")
                         .HasColumnType("bigint")
                         .HasColumnName("seat_id");
@@ -293,6 +300,10 @@ namespace SeatsReservationDotNet.Migrations
                     b.Property<long>("SessionId")
                         .HasColumnType("bigint")
                         .HasColumnName("session_id");
+
+                    b.Property<string>("Status")
+                        .HasColumnType("text")
+                        .HasColumnName("status");
 
                     b.HasKey("Id");
 
@@ -302,55 +313,7 @@ namespace SeatsReservationDotNet.Migrations
                     b.HasIndex("SessionId")
                         .HasDatabaseName("idx_session_seats_session_id");
 
-                    b.HasIndex("SessionId", "SeatId")
-                        .IsUnique();
-
                     b.ToTable("session_seats", "base_schema");
-                });
-
-            modelBuilder.Entity("SeatsReservationDotNet.Entities.User", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uuid")
-                        .HasColumnName("id");
-
-                    b.Property<DateTime>("CreatedAt")
-                        .HasColumnType("timestamp with time zone")
-                        .HasColumnName("createdAt");
-
-                    b.Property<string>("Email")
-                        .IsRequired()
-                        .HasMaxLength(70)
-                        .HasColumnType("character varying(70)")
-                        .HasColumnName("email");
-
-                    b.Property<string>("PasswordHash")
-                        .IsRequired()
-                        .HasMaxLength(100)
-                        .HasColumnType("character varying(100)")
-                        .HasColumnName("passwordHash");
-
-                    b.Property<string>("Role")
-                        .IsRequired()
-                        .HasColumnType("text")
-                        .HasColumnName("role");
-
-                    b.Property<string>("Username")
-                        .IsRequired()
-                        .HasMaxLength(50)
-                        .HasColumnType("character varying(50)")
-                        .HasColumnName("username");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("Email")
-                        .IsUnique();
-
-                    b.HasIndex("Username")
-                        .IsUnique();
-
-                    b.ToTable("users", "base_schema");
                 });
 
             modelBuilder.Entity("SeatsReservationDotNet.Entities.Hall", b =>

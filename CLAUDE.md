@@ -34,7 +34,7 @@ Database host/port/name are configured in `appsettings.json` under `Database:*`.
 
 ## Architecture
 
-ASP.NET Core 9 Web API, C# 13, .NET 9. Entity Framework Core 9 with Npgsql (PostgreSQL). Swagger via Swashbuckle.
+ASP.NET Core 10 Web API, C# 14.0, .NET 10. Entity Framework Core 10 with Npgsql (PostgreSQL). Swagger via Swashbuckle.
 
 **This is a .NET port of the Java Spring Boot project at `../SeatsReservation`.**
 
@@ -48,11 +48,15 @@ Session (Movie + Hall) → SessionSeat (Session + Seat, holds customer booking)
 All tables live in the `base_schema` PostgreSQL schema, set via `HasDefaultSchema("base_schema")` in `AppDbContext`.
 
 **Layer conventions:**
-- Controllers (`/places`, `/sessions`) — validate input, delegate to services, return HTTP responses.
-- Services (`SeatService`, `SessionService`) — all async, use `AppDbContext` directly (no extra repository layer). Throw `KeyNotFoundException` for 404 cases; `Program.cs` maps this to a 404 response.
+- Controllers (`/cinemas`, `/halls`, `/movies`, `/price-categories`, `/seats`, `/sessions`, `/session-seats`, `/auth`) — validate input, delegate to services, return HTTP responses. `[Authorize]` by default; reads (`GET`) are `[AllowAnonymous]`; deletes are `[Authorize(Roles = "Admin")]`.
+- Services (`CinemaService`, `HallService`, `MovieService`, `PriceCategoryService`, `SeatService`, `SessionService`, `SessionSeatService`, `AuthService`) — all async, use `AppDbContext` directly (no extra repository layer). Throw `KeyNotFoundException` for 404 cases; `Program.cs` maps this to a 404 response.
 - DTOs — `Save*Dto` for input (with `[Required]` validation), `Get*Dto` for output. `PagedResult<T>` mirrors Spring's `Page<T>` response shape.
 - Enums — all stored as strings in the DB via `.HasConversion<string>()` in `AppDbContext.OnModelCreating`.
 
+**Authentication & Authorization:**
+- Self-issued JWT (not an external provider) via `JwtTokenGenerator`. Config keys: `Jwt:Key`, `Jwt:Issuer`, `Jwt:Audience`, `Jwt:ExpiresInMinutes`.
+- Passwords hashed with BCrypt via `PasswordHasher`.
+- `User` entity has a `Role` enum (`HasConversion<string>()`), no separate `Role` table.
 **Enum storage:** All enums use `HasConversion<string>()` configured in `OnModelCreating`, so the string values written to PostgreSQL match the Java app's `@Enumerated(EnumType.STRING)` output exactly.
 
 **Movie genres** are a separate `movie_genres` table with a composite PK `(movie_id, genre)` — modeled as `MovieGenre` entity with `HasKey(mg => new { mg.MovieId, mg.Genre })`.

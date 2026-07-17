@@ -1,6 +1,7 @@
 using SeatsReservationDotNet.DTOs;
+using SeatsReservationDotNet.DTOs.Session;
 
-namespace SeatsReservationDotNet.Services;
+namespace SeatsReservationDotNet.Services.Interfaces;
 
 public interface ISessionService
 {

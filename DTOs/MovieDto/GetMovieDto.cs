@@ -1,18 +1,14 @@
-using System.ComponentModel.DataAnnotations;
 using SeatsReservationDotNet.Enums;
 
-namespace SeatsReservationDotNet.DTOs;
+namespace SeatsReservationDotNet.DTOs.MovieDto;
 
-public class SaveMovieDto
+public class GetMovieDto
 {
-    [MaxLength(150)]
+    public long Id { get; set; }
     public string? Title { get; set; }
-
-    [Required]
     public int? DurationMinutes { get; set; }
-
     public AgeRating? AgeRating { get; set; }
-    public float? Rating { get; set; }
+    public decimal? Rating { get; set; }
     public string? PosterUrl { get; set; }
     public string? Description { get; set; }
     public IEnumerable<Genre> Genres { get; set; } = [];

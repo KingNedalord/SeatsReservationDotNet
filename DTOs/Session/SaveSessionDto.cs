@@ -1,7 +1,7 @@
 using System.ComponentModel.DataAnnotations;
 using SeatsReservationDotNet.Enums;
 
-namespace SeatsReservationDotNet.DTOs;
+namespace SeatsReservationDotNet.DTOs.Session;
 
 public class SaveSessionDto
 {

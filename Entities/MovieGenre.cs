@@ -1,4 +1,3 @@
-using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using SeatsReservationDotNet.Enums;
 
@@ -11,9 +10,7 @@ public class MovieGenre
     public long MovieId { get; set; }
 
     [Column("genre")]
-    [MaxLength(50)]
     public Genre Genre { get; set; }
 
-    [ForeignKey(nameof(MovieId))]
-    public MovieEntity Movie { get; set; } = null!;
+    public Movie Movie { get; set; } = null!;
 }

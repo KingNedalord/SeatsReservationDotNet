@@ -1,6 +1,6 @@
 using SeatsReservationDotNet.Enums;
 
-namespace SeatsReservationDotNet.DTOs;
+namespace SeatsReservationDotNet.DTOs.Session;
 
 public class GetSessionDto
 {
